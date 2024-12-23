@@ -1,27 +1,37 @@
-import React from "react";
-
-
+"use client";
 import { AiOutlineSearch } from "react-icons/ai";
-// import { AiOutlineCloseCircle } from "react-icons/ai";
+import { BiLoader } from "react-icons/bi";
 import { BsHouseDoor } from "react-icons/bs";
 import { CiLocationOn } from "react-icons/ci";
+import useSearchForm from "../hooks/useSearchForm";
+import Select from "@/components/ui/Select";
 
-const Search = () => {
+export default function SearchForm() {
+  const {
+    search,
+    setSearch,
+    company,
+    setCompany,
+    location,
+    setLocation,
+    isPending,
+    handleSubmit,
+    clearAll,
+  } = useSearchForm();
+
   return (
     <div className="searchDiv grid gap-10 bg-greyIsh rounded-[10px] p-[3rem]">
-      <form action="">
-        <div
-          className="firstDiv flex justify-between items-center rounded-[8px] gap-[10px]
-        bg-white p-5 shadow-greyIsh-700"
-        >
+      <form onSubmit={handleSubmit}>
+        <div className="firstDiv flex justify-between items-center rounded-[8px] gap-[10px] bg-white p-5 shadow-greyIsh-700">
           <div className="flex gap-2 items-center">
             <AiOutlineSearch className="text-[25px] icon" />
             <input
               type="text"
               className="bg-transparent text-blue-500 focus:outline-none w-[100%]"
               placeholder="Search Job Here..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
-            {/* <AiOutlineCloseCircle className='text-[30px] text-[#a5a6a6] hover:text-textColor icon'/> */}
           </div>
 
           <div className="flex gap-2 items-center">
@@ -30,8 +40,9 @@ const Search = () => {
               type="text"
               className="bg-transparent text-blue-500 focus:outline-none w-[100%]"
               placeholder="Search by Company..."
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
             />
-            {/* <AiOutlineCloseCircle className='text-[30px] text-[#a5a6a6] hover:text-textColor icon'/> */}
           </div>
 
           <div className="flex gap-2 items-center">
@@ -40,12 +51,24 @@ const Search = () => {
               type="text"
               className="bg-transparent text-blue-500 focus:outline-none w-[100%]"
               placeholder="Search by Location..."
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
             />
-            {/* <AiOutlineCloseCircle className='text-[30px] text-[#a5a6a6] hover:text-textColor icon'/> */}
           </div>
 
-          <button className="bg-blueColor h-full p-5 px-10 rounded-[10px] text-white cursor-pointer hover:bg-blue-500">
-            Search
+          <button
+            type="submit"
+            disabled={isPending}
+            className="bg-blueColor h-full p-5 px-10 rounded-[10px] text-white cursor-pointer hover:bg-blue-500 disabled:opacity-50 flex items-center gap-2"
+          >
+            {isPending ? (
+              <>
+                <BiLoader className="h-4 w-4 animate-spin" />
+                Searching...
+              </>
+            ) : (
+              "Search"
+            )}
           </button>
         </div>
       </form>
@@ -55,54 +78,39 @@ const Search = () => {
           <label htmlFor="relevance" className="text-[#808080] font-semibold">
             Sort by:
           </label>
-          <select
-            name=""
+          <Select
             id="relevance"
-            className="bg-white rounded-[3px] px-4 py-1"
-          >
-            <option value="">Relevance</option>
-            <option value="">Inclusive</option>
-            <option value="">Starts With</option>
-            <option value="">Contains</option>
-          </select>
+            options={["Relevance", "Inclusive", "Starts With", "Contains"]}
+          />
         </div>
 
         <div className="singleSearch flex items-center gap-2">
           <label htmlFor="type" className="text-[#808080] font-semibold">
             Type:
           </label>
-          <select
-            name=""
+          <Select
             id="type"
-            className="bg-white rounded-[3px] px-4 py-1"
-          >
-            <option value="">Full-time</option>
-            <option value="">Remote</option>
-            <option value="">Contract</option>
-            <option value="">Part-time</option>
-          </select>
+            options={["Full-time", "Remote", "Contract", "Part-time"]}
+          />
         </div>
 
         <div className="singleSearch flex items-center gap-2">
           <label htmlFor="level" className="text-[#808080] font-semibold">
             Level:
           </label>
-          <select
-            name=""
+          <Select
             id="level"
-            className="bg-white rounded-[3px] px-4 py-1"
-          >
-            <option value="">Senior</option>
-            <option value="">Begginner</option>
-            <option value="">Intermadiate</option>
-            <option value="">Advocate</option>
-          </select>
+            options={["Senior", "Beginner", "Intermediate", "Advocate"]}
+          />
         </div>
 
-        <span className="text-[#a1a1a1] cursor-pointer">Clear All</span>
+        <span
+          className="text-[#a1a1a1] cursor-pointer hover:text-[#808080]"
+          onClick={clearAll}
+        >
+          Clear All
+        </span>
       </div>
     </div>
   );
-};
-
-export default Search;
+}

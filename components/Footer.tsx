@@ -72,7 +72,7 @@ const Footer = () => {
         </span>
         <div>
           <small className="text-[14px] text-white">
-            neslihan.ataseverr@gmail.com
+            bouchamajob@gmail.com
           </small>
           <div className="icons flex gap-4 py-[1rem]">
             <AiFillInstagram className="bg-white p-[8px] h-[35px] w-[35px] rounded-full icon text-blueColor" />

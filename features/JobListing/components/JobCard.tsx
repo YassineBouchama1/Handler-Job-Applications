@@ -1,66 +1,44 @@
-import type { FC } from 'react';
+import { Job } from "@/types/jobs";
+import Link from "next/link";
+import { BiTimeFive } from "react-icons/bi";
 
-interface JobCardProps {}
-
-const JobCard: FC<JobCardProps> = ({}) => {
-        return (
-          <div className="relative flex min-h-screen flex-col jus items-center justify-center overflow-hidden bg-gray-50 p-6 sm:py-12">
-            <div className="bg-white  shadow-xl shadow-gray-100 w-full max-w-4xl flex flex-col sm:flex-row gap-3 sm:items-center  justify-between px-5 py-4 rounded-md">
-              <div>
-                <span className="text-purple-800 text-sm">Engineering</span>
-                <h3 className="font-bold mt-px">
-                  Senior Full Stack Backend Engineer
-                </h3>
-                <div className="flex items-center gap-3 mt-2">
-                  <span className="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm">
-                    Full-time
-                  </span>
-                  <span className="text-slate-600 text-sm flex gap-1 items-center">
-                    {" "}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                    </svg>{" "}
-                    Remote, UK
-                  </span>
-                </div>
-              </div>
-              <div>
-                <button className="bg-purple-900 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center">
-                  Apply Now{" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        );
+interface JobCardProps {
+  job: Job;
 }
-export default JobCard;
+
+export const JobCard = ({ job }: JobCardProps) => {
+  const { id, image, title, time, location, desc, company } = job;
+
+  return (
+    <div className="group group/item singleJob w-[250px] p-[20px] bg-white rounded [10px] hover:bg-blueColor shadow-lg shadow-greyIsh-400/70 hover:shadow-lg">
+      <span className="flex justify-between items-center gap-4">
+        <h1 className="text-[16px] font-semibold text-textColor group-hover:text-white">
+          {title}
+        </h1>
+        <span className="flex items-center text-[#ccc] gap-1">
+          <BiTimeFive />
+          {time}
+        </span>
+      </span>
+
+      <h6 className="text-[#ccc]">{location}</h6>
+      <p className="text-[13px] text-[#959595] pt-[20px] border-t-[2px] mt-[20px] group-hover:text-white">
+        {desc}
+      </p>
+
+      <div className="company flex items-center gap-2">
+        <img src={image} alt="Company Logo" className="w-[10%]" />
+        <span className="text-[14px] py-[1rem] block group-hover:text-white">
+          {company}
+        </span>
+      </div>
+
+      <Link
+        href={`/jobs/${id}`}
+        className="border-[2px] rounded-[10px] block p-[10px] w-full text-[14px] font-semibold text-textColor hover:bg-white group-hover/item:text-textColor group-hover:text-black"
+      >
+        Apply Now
+      </Link>
+    </div>
+  );
+};
