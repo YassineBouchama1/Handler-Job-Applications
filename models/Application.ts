@@ -1,56 +1,31 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
-
-
-
-export enum ApplicationStatus {
-    PENDING = 'pending',
-    APPROVED = 'approved',
-    REJECTED = 'rejected'
-}
-
-
-
-
-//  interface name and properties
 export interface IApplication extends Document {
-    _id: mongoose.Types.ObjectId;
-    email: string;
-    name: string;
-    status: ApplicationStatus;
-    updatedAt: Date;
-    createdAt: Date;
-
+  jobId: number;
+  fullName: string;
+  email: string;
+  phone?: string;
+  resumeUrl: string;
+  coverLetter?: string;
+  status: "pending" | "reviewed" | "accepted" | "rejected";
+  createdAt: Date;
 }
 
-
-const ApplicationSchema: Schema = new Schema({
-    email: {
-        type: String,
-        required: true
-    },
-    name: {
-        type: String,
-        required: true
-    },
-
-    status: { 
-        type: String,
-        enum: Object.values(ApplicationStatus),
-        required: true
-    },
-
-
-}, {
-    timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+const ApplicationSchema = new Schema<IApplication>({
+  jobId: { type: Number, required: true },
+  fullName: { type: String, required: true },
+  email: { type: String, required: true },
+  phone: { type: String },
+  resumeUrl: { type: String, required: true },
+  coverLetter: { type: String },
+  status: {
+    type: String,
+    enum: ["pending", "reviewed", "accepted", "rejected"],
+    default: "pending",
+  },
+  createdAt: { type: Date, default: Date.now },
 });
 
-// Index for faster queries
-ApplicationSchema.index({ userId: 1, applicationType: 1 });
-
-
-const ApplicationModel = mongoose.models?.Application || mongoose.model<IApplication>('Application', ApplicationSchema);
-
-export default ApplicationModel;
+export const Application =
+  mongoose.models.Application ||
+  mongoose.model<IApplication>("Application", ApplicationSchema);

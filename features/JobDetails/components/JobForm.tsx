@@ -2,21 +2,58 @@
 
 import { useState } from "react";
 import { Job } from "@/types/jobs";
+import { submitApplication } from "@/actions/submit-application";
 
 interface ApplicationFormProps {
   job: Job;
 }
 
+interface FormState {
+  success: boolean;
+  message: string;
+  data?: any;
+}
+
 export function ApplicationForm({ job }: ApplicationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formState, setFormState] = useState<FormState | null>(null);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsSubmitting(false);
-    alert("Application submitted successfully!");
+    setFormState(null);
+
+    try {
+      const form = event.currentTarget;
+      const formData = new FormData(event.currentTarget);
+      formData.append("jobId", job.id.toString());
+
+      const result = await submitApplication(formData);
+      console.log(result);
+      setFormState(result);
+
+      if (result.success) {
+        setFormState({
+          success: true,
+          message: result.message,
+          data: result.data,
+        });
+        form.reset();
+      } else {
+        setFormState({
+          success: false,
+          message: result.message || "Failed to submit application",
+        });
+      }
+
+    } catch (error) {
+      setFormState({
+        success: false,
+        message: "An unexpected error occurred. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -85,6 +122,9 @@ export function ApplicationForm({ job }: ApplicationFormProps) {
             required
             className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
+          <p className="mt-1 text-xs text-gray-500">
+            Accepted formats: PDF, DOC, DOCX (Max 5MB)
+          </p>
         </div>
 
         <div>
@@ -135,6 +175,18 @@ export function ApplicationForm({ job }: ApplicationFormProps) {
             "Submit Application"
           )}
         </button>
+
+        {formState && (
+          <div
+            className={`mt-4 p-4 rounded-lg ${
+              formState.success
+                ? "bg-green-50 text-green-800"
+                : "bg-red-50 text-red-800"
+            }`}
+          >
+            sir tan 3ayto lik
+          </div>
+        )}
       </form>
     </div>
   );

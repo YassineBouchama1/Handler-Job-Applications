@@ -8,6 +8,9 @@ interface JobOfferDetailsProps {
 }
 
 export function JobOfferDetails({ job }: JobOfferDetailsProps) {
+
+
+
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
       <div className="flex flex-col space-y-4">
