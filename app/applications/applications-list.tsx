@@ -16,7 +16,7 @@ export function ApplicationsList({
   const handleStatusChange = async (id: string, newStatus: string) => {
     const result = await updateApplicationStatus(id, newStatus);
     if (result.success) {
-      setApplications((apps : IApplication[]) =>
+      setApplications((apps : IApplication[] | any) =>
         apps.map((app : IApplication) =>
           app._id === id ? { ...app, status: newStatus } : app
         )
@@ -29,7 +29,7 @@ export function ApplicationsList({
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-md">
       <ul role="list" className="divide-y divide-gray-200">
-        {applications.map((application) => (
+        {applications && applications.map((application) => (
           <li key={application._id}>
             <div className="px-4 py-4 sm:px-6">
               <div className="flex items-center justify-between">
